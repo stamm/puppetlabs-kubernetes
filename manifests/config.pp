@@ -13,6 +13,10 @@ class kubernetes::config (
   Array $etcd_peers = $kubernetes::etcd_peers,
   String $etcd_ip = $kubernetes::etcd_ip,
   String $cni_pod_cidr = $kubernetes::cni_pod_cidr,
+  Optional[Boolean] $cni_pod_cidr_allocate = $kubernetes::cni_pod_cidr_allocate,
+  Optional[Integer[1, 32]] $cni_pod_cidr_mask = $kubernetes::cni_pod_cidr_mask,
+  Stdlib::Ip_address $controller_manager_address = $kubernetes::controller_manager_address,
+  Stdlib::Ip_address $scheduler_address = $kubernetes::scheduler_address,
   String $kube_api_advertise_address = $kubernetes::kube_api_advertise_address,
   String $etcd_initial_cluster = $kubernetes::etcd_initial_cluster,
   Integer $api_server_count = $kubernetes::api_server_count,
@@ -29,6 +33,7 @@ class kubernetes::config (
   String $service_cidr = $kubernetes::service_cidr,
   String $node_label = $kubernetes::node_label,
   Optional[String] $cloud_provider = $kubernetes::cloud_provider,
+  Optional[Hash[String, Boolean]] $feature_gates = $kubernetes::feature_gates,
 
 ) {
 

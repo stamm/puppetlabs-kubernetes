@@ -14,7 +14,8 @@ module Puppet::Parser::Functions
     flags << "--config '#{opts['config']}'" if opts['config'].to_s != 'undef'
     flags << "--cri-socket '#{opts['cri_socket']}'" if opts['cri_socket'].to_s != 'undef'
     flags << '--dry-run' if opts['dry_run']
-    flags << "--feature-gates '#{opts['feature_gates'].join(',')}'" if opts['feature_gates'].to_s != 'undef'
+    # TODO: Hash[String, Boolean] not Array[String]
+    #flags << "--feature-gates '#{opts['feature_gates'].join(',')}'" if opts['feature_gates'].to_s != 'undef'
     flags << "--ignore-preflight-errors='#{opts['ignore_preflight_errors'].join(',')}'" if opts['ignore_preflight_errors'].to_s != 'undef'
     flags << "--kubernetes-version '#{opts['kubernetes_version']}'" if opts['kubernetes_version'].to_s != 'undef'
     flags << "--node-name '#{opts['node_name']}'" if opts['node_name'].to_s != 'undef'

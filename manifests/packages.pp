@@ -38,48 +38,19 @@ class kubernetes::packages (
   if $container_runtime == 'docker' {
     case $::osfamily {
       'Debian': {
-        package { 'docker-engine':
-          ensure => $docker_version,
+        case $::lsbdistcodename {
+          'bionic': {
+            $docker_package_name = 'docker.io'
+          }
+          default: {
+            $docker_package_name = 'docker-engine'
+          }
         }
-      }
-      'RedHat': {
-        package { 'docker-engine':
+        package { $docker_package_name:
           ensure => $docker_version,
-        }
-        file_line { 'set systemd cgroup docker':
-          path    => '/usr/lib/systemd/system/docker.service',
-          line    => 'ExecStart=/usr/bin/dockerd --exec-opt native.cgroupdriver=systemd',
-          match   => 'ExecStart',
-          require => Package['docker-engine'],
         }
       }
     default: { notify {"The OS family ${::osfamily} is not supported by this module":} }
-    }
-  }
-
-  elsif $container_runtime == 'cri_containerd' {
-
-    wget::fetch { 'download runc binary':
-      source      => 'https://github.com/opencontainers/runc/releases/download/v1.0.0-rc5/runc.amd64',
-      destination => '/usr/bin/runc',
-      timeout     => 0,
-      verbose     => false,
-      unless      => "test $(ls -A /usr/bin/runc 2>/dev/null)",
-      before      => File['/usr/bin/runc'],
-    }
-
-    file {'/usr/bin/runc':
-      mode => '0700'
-    }
-
-    archive { $containerd_archive:
-      path            => "/${containerd_archive}",
-      source          => $containerd_source,
-      extract         => true,
-      extract_command => 'tar xfz %s --strip-components=1 -C /usr/bin/',
-      extract_path    => '/',
-      cleanup         => true,
-      creates         => '/usr/bin/containerd'
     }
   }
 

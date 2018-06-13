@@ -8,7 +8,6 @@ Optional[String] $cri_socket             = undef,
 Optional[String] $discovery_file         = undef,
 Optional[String] $discovery_token        = undef,
 Optional[Array] $env                     = undef,
-Optional[String] $feature_gates          = undef,
 Optional[Array] $ignore_preflight_errors = undef,
 Optional[String] $node_name              = undef,
 Optional[Array] $path                    = undef,
@@ -27,16 +26,16 @@ Optional[String] $token                  = undef
     discovery_token          => $discovery_token,
     ca_cert_hash             => $ca_cert_hash,
     skip_ca_verification     => $skip_ca_verification,
-    feature_gates            => $feature_gates,
     ignore_preflight_errors  => $ignore_preflight_errors,
     node_name                => $node_name,
     tls_bootstrap_token      => $tls_bootstrap_token,
     token                    => $token
   })
 
-
   $exec_join = "kubeadm join ${kubeadm_join_flags}"
-  $unless_join = "kubectl get nodes | grep ${node_label}"
+  #$unless_join = "kubectl get nodes | grep ${node_label}"
+  # TODO
+  $unless_join = 'test -s /etc/kubernetes/kubelet.conf'
 
   exec { 'kubeadm join':
     command     => $exec_join,

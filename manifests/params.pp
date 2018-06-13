@@ -8,10 +8,6 @@ case $::osfamily {
     $kubernetes_package_version = "${kubernetes_version}-00"
     $docker_version = '17.03.0~ce-0~ubuntu-xenial'
   }
-  'RedHat' : {
-    $kubernetes_package_version = $kubernetes_version
-    $docker_version = '17.03.1.ce-1.el7.centos'
-  }
   default: { notify {"The OS family ${::osfamily} is not supported by this module":} }
 }
 $container_runtime = 'docker'
@@ -29,11 +25,17 @@ $etcd_ca_crt = undef
 $etcdclient_key = undef
 $etcdclient_crt = undef
 $cni_network_provider = undef
+$cni_network_provider_rbac = undef
+$calicoctl = undef
 $cni_pod_cidr = undef
+$cni_pod_cidr_allocate = undef
+$cni_pod_cidr_mask = undef
+$controller_manager_address = '0.0.0.0'
+$scheduler_address = '0.0.0.0'
 $install_dashboard = false
 $schedule_on_controller = false
 $node_label = $::hostname
-$api_server_count = 3
+$api_server_count = undef
 $etcd_peers = undef
 $etcdserver_key = undef
 $etcdpeer_crt = undef
@@ -50,4 +52,5 @@ $apiserver_extra_arguments = []
 $service_cidr = '10.96.0.0/12'
 $controller_address = undef
 $cloud_provider = undef
+$feature_gates = undef
 }
