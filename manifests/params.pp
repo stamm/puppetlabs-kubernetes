@@ -42,6 +42,7 @@ $etcdpeer_crt = undef
 $etcdserver_crt = undef
 $etcdpeer_key = undef
 $token = undef
+$token_ttl = undef
 $discovery_token_hash = undef
 $kubernetes_ca_crt = undef
 $kubernetes_ca_key = undef

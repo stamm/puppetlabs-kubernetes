@@ -204,6 +204,7 @@ class kubernetes (
   String $kubernetes_ca_crt                                        = $kubernetes::params::kubernetes_ca_crt,
   String $kubernetes_ca_key                                        = $kubernetes::params::kubernetes_ca_key,
   String $token                                                    = $kubernetes::params::token,
+  String $token_ttl                                                = $kubernetes::params::token_ttl,
   String $discovery_token_hash                                     = $kubernetes::params::discovery_token_hash,
   String $sa_pub                                                   = $kubernetes::params::sa_pub,
   String $sa_key                                                   = $kubernetes::params::sa_key,
