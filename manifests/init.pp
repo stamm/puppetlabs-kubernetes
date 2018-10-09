@@ -203,6 +203,8 @@ class kubernetes (
   Integer $api_server_count                                        = $kubernetes::params::api_server_count,
   String $kubernetes_ca_crt                                        = $kubernetes::params::kubernetes_ca_crt,
   String $kubernetes_ca_key                                        = $kubernetes::params::kubernetes_ca_key,
+  String $kubernetes_front_proxy_ca_crt                            = $kubernetes::params::kubernetes_front_proxy_ca_crt,
+  String $kubernetes_front_proxy_ca_key                            = $kubernetes::params::kubernetes_front_proxy_ca_key,
   String $token                                                    = $kubernetes::params::token,
   String $token_ttl                                                = $kubernetes::params::token_ttl,
   String $discovery_token_hash                                     = $kubernetes::params::discovery_token_hash,
