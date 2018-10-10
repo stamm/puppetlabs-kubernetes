@@ -41,3 +41,10 @@ featureGates:
   <%= feature %>: <%= value %>
 <% end -%>
 <% end -%>
+<%- if @kube_proxy -%>
+kubeProxy:
+  config:
+<% @kube_proxy.each do |param, value| -%>
+    <%= param %>: <%= value %>
+<% end -%>
+<% end -%>

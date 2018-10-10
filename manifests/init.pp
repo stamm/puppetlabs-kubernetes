@@ -203,8 +203,8 @@ class kubernetes (
   Integer $api_server_count                                        = $kubernetes::params::api_server_count,
   String $kubernetes_ca_crt                                        = $kubernetes::params::kubernetes_ca_crt,
   String $kubernetes_ca_key                                        = $kubernetes::params::kubernetes_ca_key,
-  String $kubernetes_front_proxy_ca_crt                            = $kubernetes::params::kubernetes_front_proxy_ca_crt,
-  String $kubernetes_front_proxy_ca_key                            = $kubernetes::params::kubernetes_front_proxy_ca_key,
+  Optional[String] $kubernetes_front_proxy_ca_crt                  = $kubernetes::params::kubernetes_front_proxy_ca_crt,
+  Optional[String] $kubernetes_front_proxy_ca_key                  = $kubernetes::params::kubernetes_front_proxy_ca_key,
   String $token                                                    = $kubernetes::params::token,
   String $token_ttl                                                = $kubernetes::params::token_ttl,
   String $discovery_token_hash                                     = $kubernetes::params::discovery_token_hash,
@@ -217,6 +217,7 @@ class kubernetes (
   Optional[String] $controller_address                             = $kubernetes::params::controller_address,
   Optional[String] $cloud_provider                                 = $kubernetes::params::cloud_provider,
   Optional[Hash[String, Boolean]] $feature_gates                   = $kubernetes::params::feature_gates,
+  Optional[Hash[String, String]] $kube_proxy                       = $kubernetes::params::kube_proxy,
   ) inherits kubernetes::params {
 
   if $controller {

@@ -26,8 +26,8 @@ class kubernetes::config (
   String $discovery_token_hash = $kubernetes::discovery_token_hash,
   String $kubernetes_ca_crt = $kubernetes::kubernetes_ca_crt,
   String $kubernetes_ca_key = $kubernetes::kubernetes_ca_key,
-  String $kubernetes_front_proxy_ca_crt = $kubernetes::kubernetes_front_proxy_ca_crt,
-  String $kubernetes_front_proxy_ca_key = $kubernetes::kubernetes_front_proxy_ca_key,
+  Optional[String] $kubernetes_front_proxy_ca_crt = $kubernetes::kubernetes_front_proxy_ca_crt,
+  Optional[String] $kubernetes_front_proxy_ca_key = $kubernetes::kubernetes_front_proxy_ca_key,
   String $container_runtime = $kubernetes::container_runtime,
   String $sa_pub = $kubernetes::sa_pub,
   String $sa_key = $kubernetes::sa_key,
@@ -37,12 +37,12 @@ class kubernetes::config (
   String $node_label = $kubernetes::node_label,
   Optional[String] $cloud_provider = $kubernetes::cloud_provider,
   Optional[Hash[String, Boolean]] $feature_gates = $kubernetes::feature_gates,
-
+  Optional[Hash[String, String]] $kube_proxy = $kubernetes::kube_proxy,
 ) {
 
   $kube_dirs = ['/etc/kubernetes','/etc/kubernetes/manifests','/etc/kubernetes/pki','/etc/kubernetes/pki/etcd']
   $etcd = ['ca.crt', 'ca.key', 'client.crt', 'client.key','peer.crt', 'peer.key', 'server.crt', 'server.key']
-  $pki = ['ca.crt', 'ca.key', 'front-proxy-ca.crt', 'front-proxy-ca.key', 'sa.pub','sa.key']
+  $pki = ['ca.crt', 'ca.key', 'sa.pub','sa.key']
   $kube_dirs.each | String $dir |  {
     file  { $dir :
       ensure => directory,
@@ -63,6 +63,17 @@ class kubernetes::config (
       ensure  => present,
       mode    => '0644',
       content => template("kubernetes/pki/${pki_files}.erb"),
+    }
+  }
+
+  if $kubernetes_front_proxy_ca_crt and $kubernetes_front_proxy_ca_key {
+    $front_proxy_pki = ['front-proxy-ca.crt', 'front-proxy-ca.key']
+    $front_proxy_pki.each | String $pki_files | {
+      file {"/etc/kubernetes/pki/${pki_files}":
+        ensure  => present,
+        mode    => '0644',
+        content => template("kubernetes/pki/${pki_files}.erb"),
+      }
     }
   }
 
