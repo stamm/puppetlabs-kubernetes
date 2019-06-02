@@ -8,7 +8,7 @@ etcd:
   external:
     endpoints:
     <% @etcd_peers.each do |peer| -%>
-    - https://<%= peer %>:2379
+  - https://<%= peer %>:2379
     <% end %>
     caFile: /etc/kubernetes/pki/etcd/ca.crt
     certFile: /etc/kubernetes/pki/etcd/client.crt
