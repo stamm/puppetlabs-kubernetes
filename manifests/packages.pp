@@ -77,6 +77,7 @@ class kubernetes::packages (
         require => Exec['apt_update'],
       }
     }
+  }
 
   if $controller {
     archive { $etcd_archive:
