@@ -66,9 +66,6 @@ class kubernetes::packages (
         repos        => 'stable',
         release      => $::lsbdistcodename,
       } ->
-      package { $docker_package_name:
-        ensure  => 'latest',
-      } ->
       package { 'docker.io':
         ensure => 'absent',
       } ->
