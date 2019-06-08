@@ -61,17 +61,17 @@ class kubernetes::packages (
         source => 'https://download.docker.com/linux/ubuntu/gpg',
       } ->
       apt::source { $docker_package_name:
-        architecture => 'amd64',
-        location     => 'https://download.docker.com/linux/ubuntu',
-        repos        => 'stable',
-        release      => $::lsbdistcodename,
+        architecture  => 'amd64',
+        location      => 'https://download.docker.com/linux/ubuntu',
+        repos         => 'stable',
+        release       => $::lsbdistcodename,
+        notify_update => true,
       } ->
       package { 'docker.io':
         ensure => 'absent',
       } ->
       package { $docker_package_name:
         ensure => $docker_version,
-        require => Exec['apt_update'],
       }
     }
   }
