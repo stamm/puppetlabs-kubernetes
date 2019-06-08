@@ -53,6 +53,29 @@ class kubernetes::packages (
     default: { notify {"The OS family ${::osfamily} is not supported by this module":} }
     }
   }
+  if $container_runtime == 'docker-ce' {
+    $docker_package_name = 'docker-ce'
+
+    apt::key { '9DC858229FC7DD38854AE2D88D81803C0EBFCD88':
+      source => 'https://download.docker.com/linux/ubuntu/gpg',
+    } ->
+    apt::source { $docker_package_name:
+      architecture => 'amd64',
+      location     => 'https://download.docker.com/linux/ubuntu',
+      repos        => 'stable',
+      release      => $::lsbdistcodename,
+    } ->
+    package { $docker_package_name:
+      ensure  => 'latest',
+    } ->
+    package { 'docker.io':
+      ensure => 'absent',
+    } ->
+    package { $docker_package_name:
+      ensure => $docker_version,
+      require => Exec['apt_update'],
+    }
+  }
 
   if $controller {
     archive { $etcd_archive:
