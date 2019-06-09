@@ -60,7 +60,6 @@ controllerManagerExtraArgs:
 imageRepository: k8s.gcr.io
 kind: ClusterConfiguration
 kubernetesVersion: <%= @kubernetes_version.split('-').first %>
-networking:
 schedulerExtraArgs:
   address: "<%= @scheduler_address %>"
 unifiedControlPlaneImage: ""
