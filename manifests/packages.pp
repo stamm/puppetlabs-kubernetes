@@ -63,7 +63,7 @@ class kubernetes::packages (
         repos         => 'stable',
         release       => $::lsbdistcodename,
         notify_update => true,
-        apt           => {
+        key           => {
           id     => '9DC858229FC7DD38854AE2D88D81803C0EBFCD88',
           source => 'https://download.docker.com/linux/ubuntu/gpg',
         }
