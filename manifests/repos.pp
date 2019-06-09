@@ -29,7 +29,7 @@ class kubernetes::repos (
           }
         }
         'docker-ce': {
-          apt::source { 'docker-ce':
+          apt::source { $docker_package_name:
             architecture  => 'amd64',
             location      => 'https://download.docker.com/linux/ubuntu',
             repos         => 'stable',
