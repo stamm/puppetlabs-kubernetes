@@ -218,6 +218,7 @@ class kubernetes (
   Optional[String] $cloud_provider                                 = $kubernetes::params::cloud_provider,
   Optional[Hash[String, Boolean]] $feature_gates                   = $kubernetes::params::feature_gates,
   Optional[Hash[String, String]] $kube_proxy                       = $kubernetes::params::kube_proxy,
+  String $control_plane_endpoint                                   = $kubernetes::params::control_plane_endpoint,
   ) inherits kubernetes::params {
 
   if $controller {
