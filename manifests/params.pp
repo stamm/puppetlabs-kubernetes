@@ -57,4 +57,5 @@ $controller_address = undef
 $cloud_provider = undef
 $feature_gates = undef
 $kube_proxy = undef
+$control_plane_endpoint = ''
 }
