@@ -39,6 +39,8 @@ class kubernetes::config (
   Optional[Hash[String, Boolean]] $feature_gates = $kubernetes::feature_gates,
   Optional[Hash[String, String]] $kube_proxy = $kubernetes::kube_proxy,
   String $control_plane_endpoint = $kubernetes::control_plane_endpoint,
+  Stdlib::Ip_address $dns_addr = $kubernetes::dns_addr,
+  Integer $max_pods = $kubernetes::max_pods,
 ) {
 
   $kube_dirs = ['/etc/kubernetes','/etc/kubernetes/manifests','/etc/kubernetes/pki','/etc/kubernetes/pki/etcd']
