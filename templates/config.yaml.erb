@@ -1,7 +1,4 @@
-apiVersion: kubeadm.k8s.io/v1alpha3
-apiEndpoint:
-  advertiseAddress: <%= @kube_api_advertise_address %>
-  bindPort: 6443
+apiVersion: kubeadm.k8s.io/v1beta2
 bootstrapTokens:
 - groups:
   - system:bootstrappers:kubeadm:default-node-token
@@ -10,6 +7,9 @@ bootstrapTokens:
   usages:
   - signing
   - authentication
+localAPIEndpoint:
+  advertiseAddress: <%= @kube_api_advertise_address %>
+  bindPort: 6443
 kind: InitConfiguration
 nodeRegistration:
   criSocket: /var/run/dockershim.sock
@@ -18,18 +18,32 @@ nodeRegistration:
   - effect: NoSchedule
     key: node-role.kubernetes.io/master
 ---
-apiServerCertSANs:
+apiServer:
+  certSANs:
 <%- if @apiserver_cert_extra_sans -%>
-<% @apiserver_cert_extra_sans.each do |san| -%>
-- <%= san %>
+<%- @apiserver_cert_extra_sans.each do |san| -%>
+  - <%= san %>
+<%- end -%>
 <% end -%>
-<% end -%>
-apiServerExtraArgs:
-  endpoint-reconciler-type: lease
-<% @apiserver_extra_arguments.each do |arg| -%>
-  <%= arg %>
-<% end -%>
-apiVersion: kubeadm.k8s.io/v1alpha3
+  extraArgs:
+    endpoint-reconciler-type: lease
+  <%- @apiserver_extra_arguments.each do |arg| -%>
+    <%= arg %>
+  <%- end -%>
+  timeoutForControlPlane: 4m0s
+apiVersion: kubeadm.k8s.io/v1beta2
+certificatesDir: /etc/kubernetes/pki
+clusterName: kubernetes
+controlPlaneEndpoint: <%= @control_plane_endpoint %>
+controllerManager:
+  extraArgs:
+    address: "<%= @controller_manager_address %>"
+    allocate-node-cidrs: "<%= @cni_pod_cidr_allocate %>"
+    cluster-cidr: "<%= @cni_pod_cidr %>"
+    node-cidr-mask-size: "<%= @cni_pod_cidr_mask %>"
+    service-cluster-ip-range: "<%= @service_cidr %>"
+dns:
+  type: CoreDNS
 etcd:
   external:
     caFile: /etc/kubernetes/pki/etcd/ca.crt
@@ -39,32 +53,18 @@ etcd:
     - https://<%= peer %>:2379
     <%- end -%>
     keyFile: /etc/kubernetes/pki/etcd/client.key
-certificatesDir: /etc/kubernetes/pki
-controlPlaneEndpoint: "<%= @control_plane_endpoint %>"
-<%- if @feature_gates -%>
-featureGates:
-<% @feature_gates.each do |feature, value| -%>
-  <%= feature %>: <%= value %>
-<% end -%>
-<% end -%>
-networking:
-  dnsDomain: cluster.local
-  podSubnet: ""
-  serviceSubnet: "<%= @service_cidr %>"
-controllerManagerExtraArgs:
-  address: "<%= @controller_manager_address %>"
-  allocate-node-cidrs: "<%= @cni_pod_cidr_allocate %>"
-  cluster-cidr: "<%= @cni_pod_cidr %>"
-  node-cidr-mask-size: "<%= @cni_pod_cidr_mask %>"
-  service-cluster-ip-range: "<%= @service_cidr %>"
 imageRepository: k8s.gcr.io
 kind: ClusterConfiguration
 kubernetesVersion: <%= @kubernetes_version.split('-').first %>
-schedulerExtraArgs:
-  address: "<%= @scheduler_address %>"
-unifiedControlPlaneImage: ""
+networking:
+  dnsDomain: cluster.local
+  podSubnet: ""
+  serviceSubnet: <%= @service_cidr %>
+scheduler:
+  extraArgs:
+    address: <%= @scheduler_address %>
 ---
-apiVersion: kubeproxy.config.k8s.io/v1alpha1
+apiVersion: kubeproxy.config.k8s.io/v1beta2
 bindAddress: 0.0.0.0
 clientConnection:
   acceptContentTypes: ""
@@ -72,7 +72,7 @@ clientConnection:
   contentType: application/vnd.kubernetes.protobuf
   kubeconfig: /var/lib/kube-proxy/kubeconfig.conf
   qps: 5
-clusterCIDR: "<%= @cni_pod_cidr %>"
+clusterCIDR: <%= @cni_pod_cidr %>
 configSyncPeriod: 15m0s
 conntrack:
   max: null
@@ -92,6 +92,7 @@ ipvs:
   excludeCIDRs: null
   minSyncPeriod: 0s
   scheduler: ""
+  strictARP: false
   syncPeriod: 30s
 kind: KubeProxyConfiguration
 metricsBindAddress: 127.0.0.1:10249
