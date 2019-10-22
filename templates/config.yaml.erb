@@ -64,7 +64,7 @@ scheduler:
   extraArgs:
     address: <%= @scheduler_address %>
 ---
-apiVersion: kubeproxy.config.k8s.io/v1beta2
+apiVersion: kubeproxy.config.k8s.io/v1alpha1
 bindAddress: 0.0.0.0
 clientConnection:
   acceptContentTypes: ""
@@ -108,7 +108,7 @@ winkernel:
   sourceVip: ""
 ---
 address: 0.0.0.0
-apiVersion: kubelet.config.k8s.io/v1beta2
+apiVersion: kubelet.config.k8s.io/v1alpha1
 authentication:
   anonymous:
     enabled: false
