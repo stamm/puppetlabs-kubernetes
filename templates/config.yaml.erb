@@ -58,7 +58,7 @@ kind: ClusterConfiguration
 kubernetesVersion: <%= @kubernetes_version.split('-').first %>
 networking:
   dnsDomain: cluster.local
-  podSubnet: ""
+  podSubnet: <%= @cni_pod_cidr %>
   serviceSubnet: <%= @service_cidr %>
 scheduler:
   extraArgs:
@@ -75,7 +75,6 @@ clientConnection:
 clusterCIDR: <%= @cni_pod_cidr %>
 configSyncPeriod: 15m0s
 conntrack:
-  max: null
   maxPerCore: 32768
   min: 131072
   tcpCloseWaitTimeout: 1h0m0s
