@@ -219,7 +219,7 @@ class kubernetes (
   Optional[Hash[String, Boolean]] $feature_gates                   = $kubernetes::params::feature_gates,
   Optional[Hash[String, String]] $kube_proxy                       = $kubernetes::params::kube_proxy,
   String $control_plane_endpoint                                   = $kubernetes::params::control_plane_endpoint,
-  Stdlib::Ip_address $dns_ip                                       = $kubernetes::params::dns_ip,
+  Stdlib::Ip_address $kube_dns_ip                                  = $kubernetes::params::kube_dns_ip,
   Integer $max_pods                                                = $kubernetes::params::max_pods,
   ) inherits kubernetes::params {
 

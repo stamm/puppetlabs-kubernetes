@@ -124,7 +124,7 @@ authorization:
 cgroupDriver: cgroupfs
 cgroupsPerQOS: true
 clusterDNS:
-- <%= @dns_ip %>
+- <%= @kube_dns_ip %>
 clusterDomain: cluster.local
 configMapAndSecretChangeDetectionStrategy: Watch
 containerLogMaxFiles: 5
