@@ -58,6 +58,6 @@ $cloud_provider = undef
 $feature_gates = undef
 $kube_proxy = undef
 $control_plane_endpoint = ''
-$kube_ip = ''
+$kube_dns_ip = ''
 $max_pods = 0
 }
